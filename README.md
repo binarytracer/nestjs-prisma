@@ -9,10 +9,16 @@
 4. Run `npm run start:dev`
 ```
 
-#### Swagger
+### Swagger
 
 ![image](https://github.com/user-attachments/assets/36853208-3215-4c19-8b51-e1d97cdb3bec)
 
+#### Templates
+
+- **Scalar**, visit http://localhost:3000/reference, [Configuration](https://github.com/scalar/scalar/blob/main/documentation/configuration.md).
+
+- **Redoc**, visit http://localhost:3000/docs.
 
 ### ORM and Database
 
+> Prisma + Postgre

@@ -24,3 +24,84 @@ model Category {
     id   Int    @id @default(autoincrement())
     name String
 }
+
+enum ActivityType {
+    Video
+    Article
+}
+
+model Activity {
+    id   Int          @id @default(autoincrement())
+    url  String // shared
+    type ActivityType // discriminator
+
+    video   Video? // model-specific 1-1 relation
+    article Article? // model-specific 1-1 relation
+
+    owner   User @relation(fields: [ownerId], references: [id])
+    ownerId Int
+}
+
+model Video {
+    id         Int      @id @default(autoincrement())
+    duration   Int // video-only
+    activityId Int      @unique
+    activity   Activity @relation(fields: [activityId], references: [id])
+}
+
+model Article {
+    id         Int      @id @default(autoincrement())
+    body       String // article-only 
+    activityId Int      @unique
+    activity   Activity @relation(fields: [activityId], references: [id])
+}
+
+model User {
+    id         Int        @id @default(autoincrement())
+    name       String
+    createdAt  DateTime   @default(now())
+    activities Activity[]
+    File       File[]
+}
+
+model Provider {
+    id           Int      @id @default(autoincrement())
+    providerName String
+    address      String
+    createdAt    DateTime @default(now())
+    files        File[]
+}
+
+model Patient {
+    id          Int      @id @default(autoincrement())
+    patientName String
+    address     String
+    dob         String
+    createdAt   DateTime @default(now())
+    File        File[]
+}
+
+enum OwnerType {
+    User
+    Patient
+    Provider
+}
+
+model File {
+    id   String @id @default(uuid())
+    path String
+
+    ownerId    Int
+    ownerType  OwnerType
+    // userId     Int?
+    providerId Int
+    // patientId  Int?
+
+    // user     User?     @relation(fields: [userId], references: [id])
+    provider  Provider @relation(fields: [providerId], references: [id])
+    // patient  Patient?  @relation(fields: [patientId], references: [id])
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    Int?
+    Patient   Patient? @relation(fields: [patientId], references: [id])
+    patientId Int?
+}
